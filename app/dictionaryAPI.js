@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 // API Key for Dictionary
 const apiKey = '4cfd5be6-57f6-433e-a072-a247d4d256ca';

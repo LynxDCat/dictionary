@@ -8,14 +8,29 @@ export default function LandingScreen() {
   const [definition, setDefinition] = useState(null);
 
   // To search a word
-  const searchWord = async () => {
-    try {
-      const data = await fetchDefinition(word);
-      setDefinition(data);
-    } catch (error) {
-      console.error(error.message);
+const searchWord = async () => {
+  try {
+    console.log(word); // Log the current value of the word state
+    const data = await fetchDefinition(word);
+    console.log(word);
+
+    // Check if the data is an array
+    if (Array.isArray(data)) {
+      // Iterate over the array elements
+      data.forEach(entry => {
+        // Log the definition, name, and examples
+        console.log("Definition:", entry.shortdef);
+        console.log("Name:", entry.meta.stems);
+        console.log("Examples:", entry.fl);
+      });
+    } else {
+      // Log a message if no definition is found
+      console.log("No definition found.");
     }
-  };
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
   // It's return value
   return (
