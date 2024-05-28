@@ -7,6 +7,7 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/native';
 
 export default function Index() {
+  // useStates
   const [isSigningIn, setIsSigningIn] = useState(false);
   const navigation = useNavigation();
 
@@ -21,6 +22,7 @@ export default function Index() {
     },
   });
 
+  // When the button was clicked
   const onSubmit = async ({ username, password }) => {
     setIsSigningIn(true);
     try {
@@ -45,6 +47,7 @@ export default function Index() {
   };
   
 
+  // Return value
   return (
     <View style={styles.container}>
       <CustomInput
@@ -75,6 +78,8 @@ export default function Index() {
   );
 }
 
+
+// CSS
 const styles = StyleSheet.create({
   container: {
     flex: 1,

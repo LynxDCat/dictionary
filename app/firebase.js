@@ -1,6 +1,8 @@
 const { initializeApp } = require("firebase/app");
 const { getFirestore, doc, getDoc, collection, getDocs, query } = require("firebase/firestore");
 
+// Configs
+// NOTE: Lagay sa .env para tago and lagay sa .gitignore yung env
 const firebaseConfig = {
     apiKey: "AIzaSyCbsZKuijiV-qhzTXsyhIrIlk-U8kZsNZw",
     authDomain: "dictionary-66c29.firebaseapp.com",
@@ -24,6 +26,7 @@ const initializeFirebaseApp = () => {
     }
 };
 
+// Checking ng user database
 const checkDocument = async (email, password) => {
     try {
         const docRef = doc(firestoreDb, "user", email);

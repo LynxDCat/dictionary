@@ -1,13 +1,13 @@
-// LandingScreen.js
-
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import { fetchDefinition } from "../dictionaryAPI";
 
 export default function LandingScreen() {
+  // useStates
   const [word, setWord] = useState('');
   const [definition, setDefinition] = useState(null);
 
+  // To search a word
   const searchWord = async () => {
     try {
       const data = await fetchDefinition(word);
@@ -17,6 +17,7 @@ export default function LandingScreen() {
     }
   };
 
+  // It's return value
   return (
     <View style={styles.container}>
       <TextInput
@@ -35,6 +36,7 @@ export default function LandingScreen() {
   );
 }
 
+// CSS
 const styles = StyleSheet.create({
   container: {
     flex: 1,
