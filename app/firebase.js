@@ -31,11 +31,14 @@ const checkDocument = async (email, password) => {
         
         if (docSnap.exists() && docSnap.data().password === password) {
             console.log("Access Granted");
+            return true;
         } else {
             console.log("Access Denieed");
+            return false;
         }
     } catch (error) {
         console.log(error);
+        return false;
     }
 };
 

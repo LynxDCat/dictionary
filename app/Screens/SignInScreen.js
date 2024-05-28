@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { initializeFirebaseApp, checkDocument } from "./firebase";
+import { View, StyleSheet } from "react-native";
+import { initializeFirebaseApp, checkDocument } from "../firebase";
 import { useForm } from 'react-hook-form';
-import CustomInput from "../components/CustomInput/CustomInput";
-import CustomButton from "../components/CustomButton/CustomButton";
-import { fetchDefinition } from './dictionaryAPI'; // Import fetchDefinition directly
+import CustomInput from "../../components/CustomInput/CustomInput";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import { useNavigation } from '@react-navigation/native';
 
 export default function Index() {
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const navigation = useNavigation();
+
   const {
     control,
     handleSubmit,
@@ -24,14 +26,16 @@ export default function Index() {
     try {
       // Initialize Firebase app
       initializeFirebaseApp();
+      const isTrue = await checkDocument(username, password);
 
-      // Check user document in Firestore
-      await checkDocument(username, password);
-
-      // Fetch definition
-      const word = 'Book'; // Replace this with the word you want to look up
-      const data = await fetchDefinition(word);
-      console.log(data);
+      // Cheking user's credential to firebase
+      if(isTrue){
+        // Navigate to Landing Screen
+        navigation.navigate('Landing Page');
+        
+      } else {
+        console.log("Wrong email or password");
+      }
       
       setIsSigningIn(false);
     } catch (error) {
@@ -39,6 +43,7 @@ export default function Index() {
       setIsSigningIn(false);
     }
   };
+  
 
   return (
     <View style={styles.container}>
