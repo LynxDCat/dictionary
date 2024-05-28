@@ -2,6 +2,18 @@ import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { initializeFirebaseApp, checkDocument } from "./firebase";
 
+const { fetchDefinition } = require('./dictionaryAPI');
+
+const word = 'Book'; // Replace this with the word you want to look up
+
+fetchDefinition(word)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error.message);
+  });
+
 export default function Index() {
   useEffect(() => {
     initializeFirebaseApp();
