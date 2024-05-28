@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { initializeFirebaseApp, checkDocument } from "../firebase";
 import { useForm } from 'react-hook-form';
