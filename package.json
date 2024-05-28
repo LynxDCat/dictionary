@@ -31,7 +31,10 @@
     "firebase": "^10.12.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+<<<<<<< HEAD
     "react-hook-form": "^7.51.5",
+=======
+>>>>>>> f6451ae12332d504e8e3470652bf77a4bc13e3fd
     "react-native": "0.74.1",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-reanimated": "~3.10.1",
