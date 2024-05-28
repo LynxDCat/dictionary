@@ -4,74 +4,58 @@ import { initializeFirebaseApp, checkDocument } from "./firebase";
 import { useForm } from 'react-hook-form';
 import CustomInput from "../components/CustomInput/CustomInput";
 import CustomButton from "../components/CustomButton/CustomButton";
-
-const { fetchDefinition } = require('./dictionaryAPI');
-
-const word = 'Book'; // Replace this with the word you want to look up
-
-fetchDefinition(word)
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.error(error.message);
-  });
+import { fetchDefinition } from './dictionaryAPI'; // Import fetchDefinition directly
 
 export default function Index() {
- 
-
   const [isSigningIn, setIsSigningIn] = useState(false);
   const {
     control,
     handleSubmit,
-    formState: { errors }, l
+    formState: { errors },
   } = useForm({
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
   });
 
-  const onSubmit = async (username, passwork) => {
-
+  const onSubmit = async ({ username, password }) => {
     setIsSigningIn(true);
     try {
-      //call login api with your credentials
-      Index(username, passwork);
+      // Initialize Firebase app
+      initializeFirebaseApp();
+
+      // Check user document in Firestore
+      await checkDocument(username, password);
+
+      // Fetch definition
+      const word = 'Book'; // Replace this with the word you want to look up
+      const data = await fetchDefinition(word);
+      console.log(data);
+      
       setIsSigningIn(false);
     } catch (error) {
+      console.log(error);
       setIsSigningIn(false);
     }
-
-    useEffect(() => {
-      initializeFirebaseApp();
-  
-      // NOTE: Paki palitan to Gab nung variable mo na email and password
-      const email = username;
-      const password = passwork;
-      checkDocument(email, password);
-    }, []);
-
   };
+
   return (
     <View style={styles.container}>
-
       <CustomInput
         control={control}
         name='username'
         rules={{ required: true }}
         placeholder='USERNAME'
       />
-
       <CustomInput
         control={control}
-        name='passwork'
+        name='password'
         rules={{ required: true }}
         placeholder='PASSWORD'
         secureTextEntry={true}
       />
-
-      <View style={[styles.signInButtonContainer]}>
+      <View style={styles.signInButtonContainer}>
         <CustomButton
           buttonStyle={styles.signInButton}
           textStyle={styles.signInButtonText}
@@ -88,61 +72,17 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     backgroundColor: '#1D3754',
     alignItems: 'center',
     justifyContent: 'flex-end',
-  },
-  headerText: {
-    fontSize: 20,
-    marginBottom: 8,
-    fontWeight: 'bold',
-  },
-  logInContainer: {
-    width: '80%',
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: 'white',
-  },
-  input: {
-    width: '80%',
-    padding: 8,
-    backgroundColor: '#CDCDC3',
-    marginVertical: 8,
-    backgroundColor: '#d3d3d3',
   },
   signInButtonContainer: {
     marginTop: 18,
     width: "20%",
   },
-  logoContainer: {
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    height: '100%',
-    width: '100%',
-    marginBottom: 25,
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  logoName: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    height: '100%',
-    color: 'dodgerblue',
-  },
-  logInCard: {
-    padding: 20,
-    borderRadius: 10,
-    elevation: 4,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.25,
-  },
   signInButton: {
     backgroundColor: '#CAA35D',
-
   },
   signInButtonText: {
     color: '#0F1F2F',
