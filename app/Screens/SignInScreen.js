@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { initializeFirebaseApp, checkDocument } from "../firebase";
 import { useForm } from 'react-hook-form';
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -7,7 +7,6 @@ import CustomButton from "../../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/native';
 
 export default function Index() {
-  // useStates
   const [isSigningIn, setIsSigningIn] = useState(false);
   const navigation = useNavigation();
 
@@ -46,10 +45,10 @@ export default function Index() {
     }
   };
   
-
   // Return value
   return (
     <View style={styles.container}>
+      <Text style={styles.signinText}>Sign In</Text>
       <CustomInput
         control={control}
         name='username'
@@ -70,14 +69,13 @@ export default function Index() {
           onPress={handleSubmit(onSubmit)}
           disabled={isSigningIn}
         >
-          {!isSigningIn ? 'Sign in' : 'Signing in...'}
+          {!isSigningIn ? 'Sign In' : 'Signing In...'}
         </CustomButton>
       </View>
       <View style={styles.filler} />
     </View>
   );
 }
-
 
 // CSS
 const styles = StyleSheet.create({
@@ -86,6 +84,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D3754',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  signinText: {
+    fontFamily: 'Inter-ExtraLight', 
+    fontSize: 15,
+    fontWeight: '900',
+    color: '#CAA35D',
   },
   signInButtonContainer: {
     marginTop: 18,
