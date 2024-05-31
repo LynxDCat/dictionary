@@ -34,6 +34,8 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   button: {
+    fontFamily: "Inter-Medium",
+    fontWeight: 500,
     textAlign: 'center',
   },
   pressed: {
