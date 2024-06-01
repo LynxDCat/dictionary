@@ -1,5 +1,5 @@
 import React, { useState,useRef } from 'react';
-import { StyleSheet, View, Text, Pressable, Modal } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Modal, Image} from 'react-native';
 import { useFonts, Inter_500Medium } from "@expo-google-fonts/inter";
 import CustomButton from '../CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
@@ -36,6 +36,9 @@ function CustomMenu({ ModalVisible, setModalVisible }) {
                 
                 <View style={styles.menu}>
                     <View style={styles.modalView}>
+                        <Image source={require("@/assets/images/logoWhite.jpg")} style = {styles.logoImage}/>
+                        <Image source={require("@/assets/images/talahulugananWhite.jpg")} style = {styles.logoWord}/>
+                        <View style = {styles.filler}/>
                         <CustomButton
                             buttonStyle={styles.signInButton}
                             textStyle={styles.signInButtonText}
@@ -69,6 +72,7 @@ const styles = StyleSheet.create({
    
       modal: {
         height: '100%',
+        
       },
       menu: {
         flex: 1,
@@ -122,5 +126,20 @@ const styles = StyleSheet.create({
       signInButtonText: {
         color: '#0F1F2F',
       },
+
+      logoImage:{
+        width: 100,
+        height: 100
+       },
+       logoWord:{
+        width: 150,
+        height: 40,
+       },
+       filler :{
+        height: '30%'
+       }
+      
+
+
 });
 

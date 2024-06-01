@@ -1,14 +1,22 @@
-import { useState,useRef } from "react"
-import { Text, View, StyleSheet, Pressable, Image, Animated } from "react-native";
+import { useState, useRef } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Image,
+  Animated,
+} from "react-native";
 import { initializeFirebaseApp, checkDocument } from "../firebase";
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import CustomNavBar from "@/components/CustomNavBar/CustomNavBar";
 import CustomMenu from "@/components/CustomMenu/CustomMenu";
-import { useNavigation } from '@react-navigation/native';
-import { useFonts, Inter_900Black, } from "@expo-google-fonts/inter";
-
+import CustomAlert from "@/components/CustomAlert/CustomAlert";
+import CustomLogo from "@/components/CustomLogo/CustomLogo";
+import { useNavigation } from "@react-navigation/native";
+import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
 
 export default function SignInScreen() {
   // useStates
@@ -17,6 +25,7 @@ export default function SignInScreen() {
   });
 
   const [ModalVisible, setModalVisible] = useState(false);
+  const [ErrorVisible, setErrorVisible] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const navigation = useNavigation();
 
@@ -26,16 +35,15 @@ export default function SignInScreen() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
   });
 
-  
   const NavBarSide = async () => {
     console.log("pressed");
     setModalVisible(true);
-  }
+  };
 
   // When the button was clicked
   const onSubmit = async ({ username, password }) => {
@@ -48,10 +56,10 @@ export default function SignInScreen() {
       // Cheking user's credential to firebase
       if (isTrue) {
         // Navigate to Landing Screen
-        navigation.navigate('Landing Page');
-
+        navigation.navigate("Landing Page");
       } else {
         console.log("Wrong email or password");
+        setErrorVisible(true);
       }
 
       setIsSigningIn(false);
@@ -67,29 +75,35 @@ export default function SignInScreen() {
   // Return value
   return (
     <View style={styles.page}>
-
-      <CustomMenu ModalVisible={ModalVisible} setModalVisible={setModalVisible} />
+      <CustomAlert
+        ErrorVisible={ErrorVisible}
+        setErrorVisible={setErrorVisible}
+        error="Wrong Email/Password"
+      />
+      <CustomMenu
+        ModalVisible={ModalVisible}
+        setModalVisible={setModalVisible}
+      />
       <CustomNavBar>
         <Pressable onPress={NavBarSide}>
-          <Image source={require('@/assets/images/menuButton.png')} />
+          <Image source={require("@/assets/images/menuButton.png")} />
         </Pressable>
       </CustomNavBar>
-      <View style={styles.logoContainer}>
+      <CustomLogo style={styles.logoContainer} />
 
-      </View>
       <View style={styles.container}>
         <Text style={styles.signintext}>Sign In</Text>
         <CustomInput
           control={control}
-          name='username'
+          name="username"
           rules={{ required: true }}
-          placeholder='USERNAME'
+          placeholder="USERNAME"
         />
         <CustomInput
           control={control}
-          name='password'
+          name="password"
           rules={{ required: true }}
-          placeholder='PASSWORD'
+          placeholder="PASSWORD"
           secureTextEntry={true}
         />
         <View style={styles.signInButtonContainer}>
@@ -99,61 +113,53 @@ export default function SignInScreen() {
             onPress={handleSubmit(onSubmit)}
             disabled={isSigningIn}
           >
-            {!isSigningIn ? 'Sign In' : 'Signing In...'}
+            {!isSigningIn ? "Sign In" : "Signing In..."}
           </CustomButton>
         </View>
         <View style={styles.filler} />
       </View>
-      
     </View>
   );
 }
-
 
 // CSS
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    backgroundColor: '#1D3754',
+    backgroundColor: "#1D3754",
     height: "100%",
-    width: "100%"
+    width: "100%",
   },
   logoContainer: {
-    backgroundColor: "blue",
-    alignItems: "flex-start",
-    height: '50%',
+    height: "50%",
+    width: "100%",
   },
   container: {
     flex: 1,
-    backgroundColor: '#1D3754',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    backgroundColor: "#1D3754",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    height: "40%",
   },
   signInButtonContainer: {
     marginTop: 18,
     width: "20%",
   },
   signInButton: {
-    backgroundColor: '#CAA35D',
+    backgroundColor: "#CAA35D",
   },
   signInButtonText: {
-    color: '#0F1F2F',
+    color: "#0F1F2F",
   },
   filler: {
     height: "15%",
   },
   signintext: {
-    fontFamily: 'Inter_900Black',
+    fontFamily: "Inter_900Black",
     fontSize: 15,
-    fontWeight: 'bold',
-    height: '5%',
-    color: '#CAA35D',
+    fontWeight: "bold",
+    height: "5%",
+    color: "#CAA35D",
     marginBottom: 10,
   },
-
-
-
-
-
-  
 });

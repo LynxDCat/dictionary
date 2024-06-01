@@ -10,7 +10,7 @@ export default function App() {
   return (
     // Navigator
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Landing Page">
+      <Stack.Navigator initialRouteName="Sign In">
         <Stack.Screen
           name="Sign In"
           component={SignInScreen}

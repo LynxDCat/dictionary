@@ -1,11 +1,9 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { useFonts, Inter_500Medium } from "@expo-google-fonts/inter";
-
 
 function CustomNavBar(props) {
 
     return (
-        <View style={styles.navBar}>
+        <View style={[styles.navBar, props.style]}>
             <Pressable
                 onPress={props.onPress}
                 disabled={props.disabled}
@@ -25,6 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#CAA35D",
         alignItems: "center",
         justifyContent: "flex-start",
+        paddingLeft: 20,
         height: '10%',
     },
 });

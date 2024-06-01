@@ -1,6 +1,17 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { useFonts, Inter_500Medium } from "@expo-google-fonts/inter";
+
 
 function CustomButton(props) {
+
+  let [fontsLoaded] = useFonts({
+    Inter_500Medium,
+  });
+  
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={[styles.buttonOuterContainer, props.style]}>
       <Pressable
@@ -34,8 +45,7 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   button: {
-    fontFamily: "Inter-Medium",
-    fontWeight: 500,
+    fontFamily: "Inter_500Medium",
     textAlign: 'center',
   },
   pressed: {

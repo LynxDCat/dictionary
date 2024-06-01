@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { Controller } from 'react-hook-form';
+import { useFonts, Inter_900Black, Inter_300Light, Inter_100Thin } from "@expo-google-fonts/inter";
+
 
 export default function CustomInput({
   control,
@@ -11,6 +13,15 @@ export default function CustomInput({
   multiline = false,
   numberOfLines = 3,
 }) {
+
+  let [fontsLoaded] = useFonts({
+    Inter_300Light,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <Controller
       control={control}
@@ -57,11 +68,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#CDCDC3',
     width: '80%',
+    height: '15%',
     borderColor: '#e8e8e8',
     borderWidth: 1,
     borderRadius: 50,
     padding: 10,
     marginVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   paragraph: {
     fontWeight: 'bold',
@@ -69,6 +83,13 @@ const styles = StyleSheet.create({
   },
   textDanger: {
     color: '#DC143C',
+  },
+  input: {
+    fontFamily: "Inter_300Light",
+    width: '100%',
+    paddingLeft: 10,
+    backgroundColor: '#CDCDC3',
+    color: "#1D3754",
   },
 });
 

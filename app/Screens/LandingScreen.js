@@ -1,20 +1,41 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { View, StyleSheet } from "react-native";
-import { fetchDefinition, fetchAudioURL } from "../dictionaryAPI";
+import { View, StyleSheet, Pressable, Image } from "react-native";
+import { fetchDefinition, fetchThesaurus, fetchAudioURL } from "../dictionaryAPI";
+import CustomInput from "@/components/CustomInput/CustomInput";
 import CustomButton from "@/components/CustomButton/CustomButton";
-import CustomSearch from "@/components/CustomSearch/CustomSearch";
+import CustomNavBar from "@/components/CustomNavBar/CustomNavBar";
+import CustomMenu from "@/components/CustomMenu/CustomMenu";
+import CustomLogo from "@/components/CustomLogo/CustomLogo";
+import CustomAlert from "@/components/CustomAlert/CustomAlert";
 import { useNavigation } from "@react-navigation/native";
 
 export default function LandingScreen() {
+  // useState
   const [word, setWord] = useState("");
   const navigation = useNavigation();
 
-  const { control, handleSubmit } = useForm({
+  const [definition] = useState(null);
+  const [audioUrl] = useState(null);
+
+  const [ModalVisible, setModalVisible] = useState(false);
+  const [ErrorVisible, setErrorVisible] = useState(false);
+
+
+  const {
+    control,
+    handleSubmit,
+  } = useForm({
     defaultValues: {
-      word: "", 
+      word: '',
     },
   });
+
+  const NavBarSide = async () => {
+    console.log("pressed");
+    setModalVisible(true);
+  }
+  // To search a word
 
   const cleanText = (text) => {
     return text.replace(/{[^}]+}/g, '');
@@ -22,20 +43,21 @@ export default function LandingScreen() {
 
   const searchWord = async ({ word }) => {
     try {
-      const data = await fetchDefinition(word);
-
-      if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object') {
-        const definition = data[0].shortdef || [];
-        const stems = data[0].meta.stems || [];
-        const POS = data[0].fl || "";
-        const phonetic = data[0].hwi.prs[0].mw || "";
-        const firstKnownUse = data[0].date || "";
-        const historyAndEtymology = data[0].et[0][1] || "";
-
+      const definitionData = await fetchDefinition(word);
+      const thesaurusData = await fetchThesaurus(word); // Assuming you have a function to fetch thesaurus data
+  
+      if (Array.isArray(definitionData) && definitionData.length > 0 && typeof definitionData[0] === 'object') {
+        const definition = definitionData[0].shortdef || [];
+        const stems = definitionData[0].meta.stems || [];
+        const POS = definitionData[0].fl || "";
+        const phonetic = definitionData[0].hwi.prs[0].mw || "";
+        const firstKnownUse = definitionData[0].date || "";
+        const historyAndEtymology = definitionData[0].et[0][1] || "";
+  
         // Extracting examples safely
         let examples = [];
-        if (data[0].def && data[0].def[0] && data[0].def[0].sseq) {
-          data[0].def[0].sseq.forEach(sseqItem => {
+        if (definitionData[0].def && definitionData[0].def[0] && definitionData[0].def[0].sseq) {
+          definitionData[0].def[0].sseq.forEach(sseqItem => {
             if (sseqItem[0] && sseqItem[0][1] && sseqItem[0][1].dt) {
               sseqItem[0][1].dt.forEach(dtItem => {
                 if (dtItem[0] === 'vis' && Array.isArray(dtItem[1])) {
@@ -49,19 +71,23 @@ export default function LandingScreen() {
             }
           });
         }
-
-        // Extracting synonyms and antonyms safely
+  
+        // Extracting synonyms and antonyms from thesaurus data
         let synonyms = [];
         let antonyms = [];
-        if (data[0].meta && data[0].meta.syns && data[0].meta.syns.length > 0) {
-          synonyms = data[0].meta.syns.flat().map(cleanText);
+        if (Array.isArray(thesaurusData) && thesaurusData.length > 0 && typeof thesaurusData[0] === 'object') {
+          thesaurusData.forEach(entry => {
+            if (entry.meta && entry.meta.syns && entry.meta.syns.length > 0) {
+              synonyms = [...synonyms, ...entry.meta.syns.flat().map(cleanText)];
+            }
+            if (entry.meta && entry.meta.ants && entry.meta.ants.length > 0) {
+              antonyms = [...antonyms, ...entry.meta.ants.flat().map(cleanText)];
+            }
+          });
         }
-        if (data[0].meta && data[0].meta.ants && data[0].meta.ants.length > 0) {
-          antonyms = data[0].meta.ants.flat().map(cleanText);
-        }
-
+  
         const audioUrl = await fetchAudioURL(word);
-
+  
         navigation.navigate('Dictionary Page', {
           word,
           definition,
@@ -77,47 +103,84 @@ export default function LandingScreen() {
         });
       } else {
         console.log("No definition found.");
+        setErrorVisible(true);
       }
     } catch (error) {
       console.error(error.message);
     }
   };
+  
+
 
   return (
-    <View style={styles.container}>
-      <CustomSearch
-        control={control}
-        name="word"
-        rules={{ required: false }}
-        placeholder="Enter a Word"
-        onPress={handleSubmit(searchWord)}
-      />
-      <View style={styles.SearchButtonContainer}>
-        <CustomButton
-          style={styles.SearchButton}
-          onPress={handleSubmit(searchWord)}
-        >
-          Search
-        </CustomButton>
+    <View style={styles.page}>
+      <CustomMenu ModalVisible={ModalVisible} setModalVisible={setModalVisible} />
+      <CustomAlert ErrorVisible={ErrorVisible} setErrorVisible={setErrorVisible} error="No definition found."/>
+
+      <CustomNavBar>
+        <Pressable onPress={NavBarSide}>
+          <Image source={require('@/assets/images/menuButton.png')} />
+        </Pressable>
+      </CustomNavBar>
+      <CustomLogo style={styles.logoContainer}/>
+
+      <View style={styles.container}>
+
+        <CustomInput
+          control={control}
+          name='word'
+          rules={{ required: false }}
+          placeholder='Enter a Word'
+
+        />
+        <View style={styles.SearchButtonContainer}>
+          <CustomButton
+            style={styles.SearchButton}
+            onPress={handleSubmit(searchWord)}
+          >
+            Search
+          </CustomButton>
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+    backgroundColor: '#1D3754',
+    height: "100%",
+    width: "100%"
+  },
+  logoContainer: {
+    height: '50%',
+    width: '100%',
+  },
+  navBar: {
+    flexDirection: "row",
+    backgroundColor: "#CAA35D",
+    alignItems: "flex-start",
+    height: '10%',
+  },
   container: {
+    
     flex: 1,
-    backgroundColor: "#1D3754",
-    alignItems: "center",
-    justifyContent: "flex-end",
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   SearchButtonContainer: {
     marginTop: 18,
     width: "20%",
-    marginBottom: "15%",
+    marginBottom: 50,
   },
   SearchButton: {
-    backgroundColor: "#CAA35D",
+    backgroundColor: '#CAA35D',
+  },
+  definitionContainer: {
+    marginTop: 16,
+  },
+  audioContainer: {
+    marginTop: 16,
   },
 });
-  

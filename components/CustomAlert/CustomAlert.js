@@ -5,7 +5,7 @@ import CustomButton from '../CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 
 
-function CustomAlert({ ErrorVisible, setErrorVisible }) {
+function CustomAlert({ ErrorVisible, setErrorVisible, error}) {
     const closeModal = async () => {
         console.log("pressed");
         setErrorVisible(!ErrorVisible);
@@ -24,12 +24,12 @@ function CustomAlert({ ErrorVisible, setErrorVisible }) {
 
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Error</Text>
+                        <Text style={styles.modalText}>{error}</Text>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={closeModal}
                         >
-                            <Text style={styles.textStyle}>Close Pop-Up</Text>
+                            <Text style={styles.textStyle}>Close</Text>
                         </Pressable>
                     </View>
                 </View>
