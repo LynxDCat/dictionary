@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Image } from "react-native";
+import { Audio } from 'expo-av';
 
 export default function DictionaryScreen({ route }) {
   const {
@@ -16,6 +17,13 @@ export default function DictionaryScreen({ route }) {
     audioUrl,
   } = route.params;
 
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      { uri: audioUrl }
+    );
+    await sound.playAsync();
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -28,6 +36,14 @@ export default function DictionaryScreen({ route }) {
         <Text style={styles.phonetic}>
           {POS} | {phonetic}
         </Text>
+        {/* Pronounce Icon */}
+        {audioUrl && (
+          <View style={styles.pronounceIconContainer}>
+            <Pressable onPress={playSound}>
+              <Image source={require('@/assets/images/pronounceIcon.png')} style={styles.pronounceIcon} />
+            </Pressable>
+          </View>
+        )}
         {/* Definition */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Definition</Text>
@@ -123,6 +139,14 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     textAlign: "center",
     marginBottom: 16,
+  },
+  pronounceIconContainer: {
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  pronounceIcon: {
+    width: 30,
+    height: 30,
   },
   section: {
     marginBottom: 16,

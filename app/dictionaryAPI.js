@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-// API Key for Dictionary
-const apiKey = '4cfd5be6-57f6-433e-a072-a247d4d256ca';
+// API Keys for Dictionary and Thesaurus
+const dictionaryApiKey = '4cfd5be6-57f6-433e-a072-a247d4d256ca';
+const thesaurusApiKey = '6ab6cee3-6a8b-484f-af4b-d0a3a93739db';
 
 async function fetchDefinition(word) {
-  const url = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${apiKey}`;
+  const url = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${dictionaryApiKey}`;
   
   try {
     const response = await axios.get(url);
@@ -14,11 +15,21 @@ async function fetchDefinition(word) {
   }
 }
 
+async function fetchThesaurus(word) {
+  const url = `https://www.dictionaryapi.com/api/v3/references/thesaurus/json/${word}?key=${thesaurusApiKey}`;
+  
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching data from the Thesaurus API: ' + error.message);
+  }
+}
+
 async function fetchAudioURL(word) {
   try {
     const data = await fetchDefinition(word);
     
-    // Check if data is an array and contains audio information
     if (Array.isArray(data) && data.length > 0 && data[0].hwi && data[0].hwi.prs && data[0].hwi.prs.length > 0) {
       const pronunciation = data[0].hwi.prs[0];
       if (pronunciation.sound && pronunciation.sound.audio) {
@@ -26,11 +37,10 @@ async function fetchAudioURL(word) {
       }
     }
     
-    // Return null if no audio URL is found
     return null;
   } catch (error) {
     throw new Error('Error fetching audio URL: ' + error.message);
   }
 }
 
-export { fetchDefinition, fetchAudioURL };
+export { fetchDefinition, fetchThesaurus, fetchAudioURL };

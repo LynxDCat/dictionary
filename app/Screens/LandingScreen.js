@@ -12,7 +12,7 @@ export default function LandingScreen() {
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      word: "",
+      word: "", 
     },
   });
 
