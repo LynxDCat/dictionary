@@ -1,14 +1,14 @@
-*********************************************
+*********************************************<br>  
 
-Group #2
-Alaba, Marino Jose
-Boone, Gabriel 
-De Ocampo, Jay Ruiz 
-Gloria, John Louis
+Group #2<br> 
+Alaba, Marino Jose<br> 
+Boone, Gabriel<br> 
+De Ocampo, Jay Ruiz<br> 
+Gloria, John Louis<br> 
 
-*********************************************
+*********************************************<br>  
 
-Email: jayruizdeocampo103@gmail.com
-Password: admin101
+Email: jayruizdeocampo103@gmail.com<br> 
+Password: admin101<br> 
 
 *********************************************
