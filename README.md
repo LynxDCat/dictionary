@@ -8,6 +8,10 @@ Gloria, John Louis<br>
 
 *********************************************<br>  
 
+API used: https://dictionaryapi.com/products/index
+
+*********************************************<br>  
+
 Email: jayruizdeocampo103@gmail.com<br> 
 Password: admin101<br> 
 
